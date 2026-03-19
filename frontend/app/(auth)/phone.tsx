@@ -1,24 +1,29 @@
-import { useRouter } from 'expo-router';
+import { View, Text, TextInput, StyleSheet, TouchableOpacity } from 'react-native';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, View } from 'react-native';
-import Button from '../../components/Button';
+import { useRouter } from 'expo-router';
 import { COLORS } from '../../constants/colors';
+import Button from '../../components/Button';
 import { sendOTP } from '../../utils/api';
 
 export default function PhoneScreen() {
   const [phone, setPhone] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [otp, setOtp] = useState('');
   const router = useRouter();
 
   const handleSendOTP = async () => {
     if (phone.length < 10) return;
     setLoading(true);
     setError('');
+    setOtp('');
     try {
       const res = await sendOTP(phone);
       if (res.otp) {
-        router.push({ pathname: '/(auth)/otp', params: { phone } });
+        setOtp(res.otp);
+        setTimeout(() => {
+          router.push({ pathname: '/(auth)/otp', params: { phone, otp: res.otp } });
+        }, 2000);
       } else {
         setError('Failed to send OTP. Try again.');
       }
@@ -38,7 +43,7 @@ export default function PhoneScreen() {
 
       <View style={styles.card}>
         <Text style={styles.title}>Enter your phone number</Text>
-        <Text style={styles.subtitle}>We'll send you a verification code</Text>
+        <Text style={styles.subtitle}>We'll generate a verification code</Text>
 
         <View style={styles.inputRow}>
           <View style={styles.countryCode}>
@@ -56,6 +61,14 @@ export default function PhoneScreen() {
         </View>
 
         {error ? <Text style={styles.error}>{error}</Text> : null}
+
+        {otp ? (
+          <View style={styles.otpBox}>
+            <Text style={styles.otpLabel}>Your OTP code:</Text>
+            <Text style={styles.otpValue}>{otp}</Text>
+            <Text style={styles.otpHint}>Redirecting to verification...</Text>
+          </View>
+        ) : null}
 
         <Button
           title="Send OTP"
@@ -141,5 +154,28 @@ const styles = StyleSheet.create({
     fontSize: 13,
     marginBottom: 12,
     textAlign: 'center',
+  },
+  otpBox: {
+    backgroundColor: COLORS.primary,
+    borderRadius: 16,
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+  otpLabel: {
+    fontSize: 13,
+    color: COLORS.textMuted,
+    marginBottom: 8,
+  },
+  otpValue: {
+    fontSize: 36,
+    fontWeight: '800',
+    color: COLORS.surface,
+    letterSpacing: 8,
+  },
+  otpHint: {
+    fontSize: 12,
+    color: COLORS.textMuted,
+    marginTop: 8,
   },
 });

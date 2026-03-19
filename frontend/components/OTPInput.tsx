@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet } from 'react-native';
+import { View, TextInput, StyleSheet, useRef } from 'react-native';
 import { useRef } from 'react';
 import { COLORS } from '../constants/colors';
 
@@ -9,31 +9,43 @@ interface OTPInputProps {
 }
 
 export default function OTPInput({ value, onChange, length = 6 }: OTPInputProps) {
-  const inputRef = useRef<TextInput>(null);
+  const inputs = useRef<(TextInput | null)[]>([]);
 
-  const digits = value.split('').concat(Array(length).fill('')).slice(0, length);
+  const handleChange = (text: string, index: number) => {
+    const newValue = value.split('');
+    newValue[index] = text.slice(-1);
+    const joined = newValue.join('').slice(0, length);
+    onChange(joined);
+
+    if (text && index < length - 1) {
+      inputs.current[index + 1]?.focus();
+    }
+  };
+
+  const handleKeyPress = (e: any, index: number) => {
+    if (e.nativeEvent.key === 'Backspace' && !value[index] && index > 0) {
+      inputs.current[index - 1]?.focus();
+    }
+  };
 
   return (
     <View style={styles.container}>
-      {digits.map((digit, index) => (
-        <View
+      {Array.from({ length }, (_, index) => (
+        <TextInput
           key={index}
-          style={[styles.box, digit ? styles.boxFilled : null, index === value.length ? styles.boxActive : null]}
-        >
-          <TextInput
-            ref={index === 0 ? inputRef : null}
-            style={styles.digit}
-            value={digit}
-            onChangeText={(text) => {
-              const newValue = value.split('');
-              newValue[index] = text.slice(-1);
-              onChange(newValue.join('').slice(0, length));
-            }}
-            keyboardType="number-pad"
-            maxLength={1}
-            selectTextOnFocus
-          />
-        </View>
+          ref={(ref) => (inputs.current[index] = ref)}
+          style={[
+            styles.box,
+            value[index] ? styles.boxFilled : null,
+            index === value.length ? styles.boxActive : null,
+          ]}
+          value={value[index] || ''}
+          onChangeText={(text) => handleChange(text, index)}
+          onKeyPress={(e) => handleKeyPress(e, index)}
+          keyboardType="number-pad"
+          maxLength={1}
+          selectTextOnFocus
+        />
       ))}
     </View>
   );
@@ -52,21 +64,15 @@ const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: COLORS.border,
     backgroundColor: COLORS.surface,
-    justifyContent: 'center',
-    alignItems: 'center',
+    fontSize: 24,
+    fontWeight: '600',
+    color: COLORS.text,
+    textAlign: 'center',
   },
   boxFilled: {
     borderColor: COLORS.primary,
   },
   boxActive: {
     borderColor: COLORS.secondary,
-  },
-  digit: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: COLORS.text,
-    textAlign: 'center',
-    width: '100%',
-    height: '100%',
   },
 });

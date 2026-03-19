@@ -1,5 +1,5 @@
 export const CONFIG = {
-  API_URL: 'http://localhost:8000',
+  API_URL: 'https://work-a-day-backend.onrender.com',
   APP_NAME: 'Work A Day',
   OTP_LENGTH: 6,
   MAX_IMAGES: 3,

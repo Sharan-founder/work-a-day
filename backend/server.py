@@ -1,5 +1,4 @@
 import os
-import ssl
 import random
 import certifi
 from datetime import datetime, timedelta
@@ -205,6 +204,20 @@ async def setup_contractor(phone: str, profile: ContractorProfile):
             }}
         )
         return {"message": "Contractor profile saved"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/contractor/jobs")
+async def get_contractor_jobs(phone: str):
+    try:
+        contractor = db.users.find_one({"phone": phone})
+        if not contractor:
+            raise HTTPException(status_code=404, detail="Contractor not found")
+        jobs = list(db.jobs.find({"contractor_id": str(contractor["_id"])}))
+        for j in jobs:
+            j["id"] = str(j.pop("_id"))
+            j.pop("contractor_id", None)
+        return jobs
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
