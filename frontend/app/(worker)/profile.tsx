@@ -1,0 +1,163 @@
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import RatingStars from '../../components/RatingStars';
+import { COLORS } from '../../constants/colors';
+import { useAuth } from '../../context/AuthContext';
+
+export default function WorkerProfile() {
+  const { user, logout } = useAuth();
+
+  return (
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+      <View style={styles.header}>
+        <View style={styles.avatar}>
+          <Text style={styles.avatarText}>{(user?.name || 'W').charAt(0).toUpperCase()}</Text>
+        </View>
+        <Text style={styles.name}>{user?.name || 'Worker'}</Text>
+        <Text style={styles.phone}>{user?.phone}</Text>
+        <RatingStars rating={4.8} size={20} />
+      </View>
+
+      <View style={styles.statsRow}>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>24</Text>
+          <Text style={styles.statLabel}>Jobs done</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>4.8</Text>
+          <Text style={styles.statLabel}>Rating</Text>
+        </View>
+        <View style={styles.statCard}>
+          <Text style={styles.statValue}>₹700</Text>
+          <Text style={styles.statLabel}>Daily wage</Text>
+        </View>
+      </View>
+
+      <View style={styles.section}>
+        <Text style={styles.sectionTitle}>Profile Details</Text>
+        <View style={styles.detailRow}>
+          <Text style={styles.detailLabel}>Skill</Text>
+          <Text style={styles.detailValue}>Mason</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.detailLabel}>Experience</Text>
+          <Text style={styles.detailValue}>5 years</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.detailLabel}>City</Text>
+          <Text style={styles.detailValue}>Hyderabad</Text>
+        </View>
+        <View style={styles.detailRow}>
+          <Text style={styles.detailLabel}>Area</Text>
+          <Text style={styles.detailValue}>Gachibowli</Text>
+        </View>
+      </View>
+
+      <TouchableOpacity style={styles.logoutBtn} onPress={logout}>
+        <Text style={styles.logoutText}>Log Out</Text>
+      </TouchableOpacity>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: COLORS.background,
+  },
+  header: {
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    paddingTop: 64,
+    paddingBottom: 32,
+    gap: 8,
+  },
+  avatar: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: COLORS.secondary,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  avatarText: {
+    color: COLORS.surface,
+    fontSize: 32,
+    fontWeight: '700',
+  },
+  name: {
+    fontSize: 22,
+    fontWeight: '700',
+    color: COLORS.surface,
+  },
+  phone: {
+    fontSize: 14,
+    color: COLORS.textMuted,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    gap: 12,
+    padding: 20,
+  },
+  statCard: {
+    flex: 1,
+    backgroundColor: COLORS.surface,
+    borderRadius: 16,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: COLORS.primary,
+  },
+  statLabel: {
+    fontSize: 11,
+    color: COLORS.textMuted,
+    marginTop: 4,
+  },
+  section: {
+    backgroundColor: COLORS.surface,
+    borderRadius: 16,
+    marginHorizontal: 20,
+    padding: 20,
+    borderWidth: 1,
+    borderColor: COLORS.border,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: COLORS.text,
+    marginBottom: 16,
+  },
+  detailRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: COLORS.border,
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: COLORS.textLight,
+  },
+  detailValue: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: COLORS.text,
+  },
+  logoutBtn: {
+    margin: 20,
+    backgroundColor: COLORS.error,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+  },
+  logoutText: {
+    color: COLORS.surface,
+    fontSize: 16,
+    fontWeight: '600',
+  },
+});

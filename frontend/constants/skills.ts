@@ -1,0 +1,16 @@
+export const SKILLS = [
+  'Mason',
+  'Plumber',
+  'Electrician',
+  'Carpenter',
+  'Painter',
+  'Helper',
+  'Welder',
+  'Tiler',
+  'Roofer',
+  'Driver',
+  'Security Guard',
+  'Cleaner',
+  'Gardener',
+  'Other',
+];
