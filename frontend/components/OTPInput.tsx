@@ -1,4 +1,4 @@
-import { View, TextInput, StyleSheet, useRef } from 'react-native';
+import { View, TextInput, StyleSheet } from 'react-native';
 import { useRef } from 'react';
 import { COLORS } from '../constants/colors';
 

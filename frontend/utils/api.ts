@@ -81,3 +81,7 @@ export async function getAdminUsers(role?: string) {
   const res = await fetch(url);
   return res.json();
 }
+export async function getContractorJobs(phone: string) {
+  const res = await fetch(`${BASE_URL}/contractor/jobs?phone=${phone}`);
+  return res.json();
+}
