@@ -47,3 +47,18 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 export function useAuth() {
   return useContext(AuthContext);
 }
+export interface User {
+  id: string;
+  phone: string;
+  role: UserRole;
+  name?: string;
+  profile_complete: boolean;
+  rating?: number;
+  completed_jobs?: number;
+  skill?: string;
+  experience?: number;
+  wage?: number;
+  city?: string;
+  area?: string;
+  company?: string;
+}

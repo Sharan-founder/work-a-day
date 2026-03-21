@@ -55,10 +55,10 @@ export default function ContractorHome() {
           <Text style={styles.statValue}>{jobs.length}</Text>
           <Text style={styles.statLabel}>Active jobs</Text>
         </View>
-        <View style={styles.statCard}>
-          <Text style={styles.statValue}>4.7⭐</Text>
-          <Text style={styles.statLabel}>Your rating</Text>
-        </View>
+          <View style={styles.statCard}>
+            <Text style={styles.statValue}>{user?.rating || '0.0'}⭐</Text>
+            <Text style={styles.statLabel}>Your rating</Text>
+          </View>
       </View>
 
       <Text style={styles.sectionTitle}>Your Posted Jobs</Text>
