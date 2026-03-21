@@ -1,6 +1,6 @@
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
 import { COLORS } from '../../constants/colors';
+import { Text } from 'react-native';
 
 function Icon({ emoji, focused }: { emoji: string; focused: boolean }) {
   return <Text style={{ fontSize: focused ? 24 : 20, opacity: focused ? 1 : 0.6 }}>{emoji}</Text>;
@@ -26,7 +26,6 @@ export default function ContractorLayout() {
       }}
     >
       <Tabs.Screen name="home" options={{ title: 'Home', tabBarIcon: ({ focused }) => <Icon emoji="🏠" focused={focused} /> }} />
-      <Tabs.Screen name="post-job" options={{ title: 'Post Job', tabBarIcon: ({ focused }) => <Icon emoji="➕" focused={focused} /> }} />
       <Tabs.Screen name="applicants" options={{ title: 'Applicants', tabBarIcon: ({ focused }) => <Icon emoji="👷" focused={focused} /> }} />
       <Tabs.Screen name="messages" options={{ title: 'Messages', tabBarIcon: ({ focused }) => <Icon emoji="💬" focused={focused} /> }} />
       <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: ({ focused }) => <Icon emoji="👤" focused={focused} /> }} />
