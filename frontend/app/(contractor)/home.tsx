@@ -41,7 +41,7 @@ export default function ContractorHome() {
           <Text style={styles.subtitle}>Manage your job postings</Text>
         </View>
         <View style={styles.headerRight}>
-          <TouchableOpacity style={styles.addBtn} onPress={() => router.push('/(contractor)/post-job')}>
+          <TouchableOpacity style={styles.addBtn} onPress={() => router.push('/post-job')}>
             <Text style={styles.addBtnText}>+</Text>
           </TouchableOpacity>
           <View style={styles.avatar}>
