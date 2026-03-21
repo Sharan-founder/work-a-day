@@ -1,12 +1,12 @@
 import { Picker } from '@react-native-picker/picker';
 import { useState } from 'react';
 import { ScrollView, StyleSheet, Text, TextInput, View } from 'react-native';
-import Button from '../../components/Button';
-import { CITIES } from '../../constants/cities';
-import { COLORS } from '../../constants/colors';
-import { SKILLS } from '../../constants/skills';
-import { useAuth } from '../../context/AuthContext';
-import { postJob } from '../../utils/api';
+import Button from '../components/Button';
+import { CITIES } from '../constants/cities';
+import { COLORS } from '../constants/colors';
+import { SKILLS } from '../constants/skills';
+import { useAuth } from '../context/AuthContext';
+import { postJob } from '../utils/api';
 
 export default function PostJobScreen() {
   const { user } = useAuth();
