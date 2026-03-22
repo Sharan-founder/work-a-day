@@ -16,9 +16,11 @@ interface Job {
 interface JobCardProps {
   job: Job;
   onPress: () => void;
+  onApply?: () => void;
+  applied?: boolean;
 }
 
-export default function JobCard({ job, onPress }: JobCardProps) {
+export default function JobCard({ job, onPress, onApply, applied }: JobCardProps) {
   return (
     <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.8}>
       <View style={styles.header}>
@@ -43,6 +45,18 @@ export default function JobCard({ job, onPress }: JobCardProps) {
         <Text style={styles.location}>📍 {job.area}, {job.city}</Text>
         <Text style={styles.date}>🗓 {job.start_date}</Text>
       </View>
+
+      {onApply && (
+        <TouchableOpacity
+          style={[styles.applyBtn, applied && styles.appliedBtn]}
+          onPress={applied ? undefined : onApply}
+          activeOpacity={applied ? 1 : 0.8}
+        >
+          <Text style={[styles.applyText, applied && styles.appliedText]}>
+            {applied ? 'Applied ✓' : 'Apply Now'}
+          </Text>
+        </TouchableOpacity>
+      )}
     </TouchableOpacity>
   );
 }
@@ -104,6 +118,7 @@ const styles = StyleSheet.create({
   footer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 12,
   },
   location: {
     fontSize: 12,
@@ -112,5 +127,22 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 12,
     color: COLORS.textMuted,
+  },
+  applyBtn: {
+    backgroundColor: COLORS.secondary,
+    borderRadius: 10,
+    padding: 12,
+    alignItems: 'center',
+  },
+  appliedBtn: {
+    backgroundColor: COLORS.success,
+  },
+  applyText: {
+    color: COLORS.surface,
+    fontWeight: '600',
+    fontSize: 14,
+  },
+  appliedText: {
+    color: COLORS.surface,
   },
 });

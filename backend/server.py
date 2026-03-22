@@ -374,3 +374,56 @@ async def suspend_user(user_id: str):
 @app.get("/")
 async def root():
     return {"message": "Work A Day API is running!"}
+
+@app.post("/notifications")
+async def create_notification(phone: str, message: str):
+    try:
+        db.notifications.insert_one({
+            "phone": phone,
+            "message": message,
+            "read": False,
+            "created_at": datetime.utcnow()
+        })
+        return {"message": "Notification sent"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.get("/notifications")
+async def get_notifications(phone: str):
+    try:
+        notifications = list(db.notifications.find({"phone": phone}).sort("created_at", -1))
+        for n in notifications:
+            n["id"] = str(n.pop("_id"))
+        return notifications
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+@app.put("/applications/update")
+async def update_application(update: UpdateApplication):
+    try:
+        from bson import ObjectId
+        application = db.applications.find_one({"_id": ObjectId(update.application_id)})
+        if not application:
+            raise HTTPException(status_code=404, detail="Application not found")
+        
+        db.applications.update_one(
+            {"_id": ObjectId(update.application_id)},
+            {"$set": {"status": update.status}}
+        )
+
+        if update.status == "accepted":
+            worker = db.users.find_one({"_id": ObjectId(application["worker_id"])})
+            job = db.jobs.find_one({"_id": ObjectId(application["job_id"])})
+            if worker and job:
+                db.notifications.insert_one({
+                    "phone": worker["phone"],
+                    "message": f"Congratulations! You have been accepted for the job: {job['title']} at {job['area']}. Please be ready on {job['start_date']} at {job['start_time']}.",
+                    "read": False,
+                    "created_at": datetime.utcnow()
+                })
+
+        return {"message": "Application updated"}
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))

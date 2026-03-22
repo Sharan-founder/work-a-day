@@ -3,15 +3,18 @@ import { useState, useEffect } from 'react';
 import { COLORS } from '../../constants/colors';
 import { SKILLS } from '../../constants/skills';
 import JobCard from '../../components/JobCard';
-import { getJobs } from '../../utils/api';
+import { getJobs, applyJob } from '../../utils/api';
+import { useAuth } from '../../context/AuthContext';
 
 export default function JobsScreen() {
+  const { user } = useAuth();
   const [jobs, setJobs] = useState([]);
   const [search, setSearch] = useState('');
   const [selectedSkill, setSelectedSkill] = useState('All');
   const [minWage, setMinWage] = useState('');
   const [loading, setLoading] = useState(true);
   const [refreshing, setRefreshing] = useState(false);
+  const [appliedJobs, setAppliedJobs] = useState<string[]>([]);
 
   const fetchJobs = async () => {
     try {
@@ -29,6 +32,18 @@ export default function JobsScreen() {
 
   const onRefresh = () => { setRefreshing(true); fetchJobs(); };
 
+  const handleApply = async (jobId: string) => {
+    if (!user?.id) return;
+    try {
+      const res = await applyJob(jobId, user.id);
+      if (res.message === 'Applied successfully') {
+        setAppliedJobs([...appliedJobs, jobId]);
+      }
+    } catch (e) {
+      console.log('Error applying:', e);
+    }
+  };
+
   const filtered = jobs.filter((job: any) => {
     const matchSearch = job.title?.toLowerCase().includes(search.toLowerCase()) ||
       job.area?.toLowerCase().includes(search.toLowerCase());
@@ -40,7 +55,6 @@ export default function JobsScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Browse Jobs</Text>
-
       <TextInput
         style={styles.search}
         placeholder="Search by title or area..."
@@ -48,7 +62,6 @@ export default function JobsScreen() {
         value={search}
         onChangeText={setSearch}
       />
-
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filterRow}>
         {['All', ...SKILLS].map((skill) => (
           <TouchableOpacity
@@ -62,7 +75,6 @@ export default function JobsScreen() {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
       <TextInput
         style={styles.wageInput}
         placeholder="Min wage (₹)"
@@ -71,7 +83,6 @@ export default function JobsScreen() {
         value={minWage}
         onChangeText={setMinWage}
       />
-
       {loading ? (
         <Text style={styles.empty}>Loading jobs...</Text>
       ) : (
@@ -81,7 +92,15 @@ export default function JobsScreen() {
         >
           {filtered.length === 0
             ? <Text style={styles.empty}>No jobs found</Text>
-            : filtered.map((job: any) => <JobCard key={job.id} job={job} onPress={() => {}} />)
+            : filtered.map((job: any) => (
+              <JobCard
+                key={job.id}
+                job={job}
+                onPress={() => {}}
+                onApply={() => handleApply(job.id)}
+                applied={appliedJobs.includes(job.id)}
+              />
+            ))
           }
         </ScrollView>
       )}
