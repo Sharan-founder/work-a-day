@@ -37,4 +37,6 @@ Work A Day enables:
 
 ## Demo
 <img width="1920" height="1080" alt="Screenshot (28)" src="https://github.com/user-attachments/assets/55cd3d23-13f7-4c50-bd9d-8715a0030220" />
+<img width="1920" height="1080" alt="Screenshot (32)" src="https://github.com/user-attachments/assets/a4a7a252-c129-497a-adb5-2b8d37babfcf" />
+<img width="1920" height="1080" alt="Screenshot (29)" src="https://github.com/user-attachments/assets/2aa934ec-410d-4782-9830-32d0293b2f8a" />
 
