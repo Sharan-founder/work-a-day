@@ -36,4 +36,5 @@ Work A Day enables:
 - Payments integration
 
 ## Demo
-(Add screenshots here)
+<img width="1920" height="1080" alt="Screenshot (28)" src="https://github.com/user-attachments/assets/55cd3d23-13f7-4c50-bd9d-8715a0030220" />
+
