@@ -4,8 +4,7 @@ import { COLORS } from '../../constants/colors';
 import { useAuth } from '../../context/AuthContext';
 import RatingStars from '../../components/RatingStars';
 
-const GEMINI_API_KEY = 'AIzaSyCWG7paQa1XTRyrKz3HrL3iWqkBegUOFyQ'; // 🔑 Replace with your key
-
+const GEMINI_API_KEY = process.env.EXPO_PUBLIC_GEMINI_API_KEY || '';
 export default function WorkerProfile() {
   const { user, logout } = useAuth();
   const [skillInput, setSkillInput] = useState('');
